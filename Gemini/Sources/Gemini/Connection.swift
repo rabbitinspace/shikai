@@ -18,15 +18,69 @@ public final class ConnectionTask {
     private let request: Request
     private let completion: Completion
 
+    private let lock = OSLock()
+    private var isCancelled = false
+
     init(connection: NWConnection, request: Request, completion: @escaping Completion) {
         self.connection = connection
         self.request = request
         self.completion = completion
     }
 
-    func start(on _: DispatchQueue) {}
+    func start(on _: DispatchQueue) {
+        connection.stateUpdateHandler = { [weak self] state in
+            switch state {
+            case .ready:
+                guard self?.lock.whileLocked(do: { self?.isCancelled }) == false else { return }
+                self?.proceedWithRequest()
 
-    public func cancel() {}
+            case let .failed(error):
+                self?.connection.cancel()
+                self?.completion(.failure(.connection(error)))
+
+            case .cancelled:
+                self?.lock.whileLocked { self?.isCancelled = true }
+
+            default:
+                break // don't handle other cases for now
+            }
+        }
+    }
+
+    public func cancel() {
+        lock.whileLocked { isCancelled = true }
+        connection.cancel()
+    }
+
+    private func proceedWithRequest() {
+        let writer = RequestWriter(connection: connection)
+        writer.writeRequest(request) { [weak self] result in
+            guard self?.lock.whileLocked(do: { self?.isCancelled }) == false else { return }
+
+            switch result {
+            case let .success(reader):
+                self?.proceedWithResponse(reader)
+
+            case let .failure(error):
+                // TODO: will there be a cancelled error?
+                self?.completion(.failure(error))
+            }
+        }
+    }
+
+    private func proceedWithResponse(_ reader: ResponseReader) {
+        reader.readRequest { [weak self] result in
+            guard self?.lock.whileLocked(do: { self?.isCancelled }) == false else { return }
+
+            switch result {
+            case let .success(response):
+                self?.completion(.success(response))
+
+            case let .failure(error):
+                self?.completion(.failure(error))
+            }
+        }
+    }
 }
 
 final class ConnectionBuilder {
@@ -143,4 +197,6 @@ final class ResponseReader {
         self.connection = connection
         self.request = request
     }
+
+    func readRequest(with _: @escaping (Result<Response, ConnectionTask.Error>) -> Void) {}
 }
