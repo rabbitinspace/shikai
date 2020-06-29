@@ -1,20 +1,11 @@
-//
-//  AppDelegate.swift
-//  Shikai
-//
-//  Created by Igor Nikitin on 28/6/20.
-//
-
 import Cocoa
 import SwiftUI
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
     var window: NSWindow!
 
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
+    func applicationDidFinishLaunching(_: Notification) {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
 
@@ -27,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 .closable,
                 .miniaturizable,
                 .resizable,
-                .fullSizeContentView
+                .fullSizeContentView,
             ],
             backing: .buffered,
             defer: false
@@ -40,10 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(nil)
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
+    func applicationWillTerminate(_: Notification) {
         // Insert code here to tear down your application
     }
-
-
 }
-

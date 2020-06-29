@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Shikai
-//
-//  Created by Igor Nikitin on 28/6/20.
-//
-
 import SwiftUI
 
 struct ContentView: View {
