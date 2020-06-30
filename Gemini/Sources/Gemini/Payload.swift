@@ -1,8 +1,8 @@
 import Foundation
 
 public struct Header {
-    public internal(set) var status: Status
-    public internal(set) var meta: String
+    public let status: Status
+    public let meta: String
 }
 
 public struct Request {

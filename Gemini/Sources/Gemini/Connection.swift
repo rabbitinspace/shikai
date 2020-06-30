@@ -7,11 +7,11 @@ public final class ConnectionTask {
     private let connection: NWConnection
     private let request: Request
     private let completion: Completion
-    
+
     private let lock = OSLock()
     private var state = State.ready
-    private var writer: RequestWriter?  // not thread-safe
-    private var reader: ResponseReader?  // not thread-safe
+    private var writer: RequestWriter? // not thread-safe
+    private var reader: ResponseReader? // not thread-safe
 
     init(connection: NWConnection, request: Request, completion: @escaping Completion) {
         self.connection = connection
@@ -34,13 +34,13 @@ public final class ConnectionTask {
                 break // don't handle other cases for now
             }
         }
-        
+
         connection.start(queue: queue)
     }
 
     public func cancel() {
         lock.whileLocked { state = .cancelled }
-        
+
         // cancelling will also call send/receive block with a cancelled posix error
         connection.cancel()
     }
@@ -51,7 +51,7 @@ public final class ConnectionTask {
             state = state == .ready ? .finished : state
             return currentState
         }
-        
+
         guard currentState == .ready else { return }
 
         // we need to cancel a connection to clean up resources
@@ -103,14 +103,13 @@ extension ConnectionTask {
         case badStatusCode(Int)
         case badHeaderMeta(Data)
     }
-    
+
     private enum State {
         case ready
         case finished
         case cancelled
     }
 }
-
 
 final class RequestWriter {
     private let connection: NWConnection
@@ -173,29 +172,29 @@ final class ResponseReader {
 
     private func parseResponse(from data: Data) -> Result<Response, ConnectionTask.Error> {
         var data = data
-        
+
         let status: Status
         switch parseStatusCode(from: data) {
         case let .success((s, consumed)):
             status = s
             // TODO: crashes without Data()
             data = Data(data.dropFirst(consumed))
-            
-        case .failure(let error):
+
+        case let .failure(error):
             return .failure(error)
         }
-        
+
         let meta: String
         switch parseMeta(from: data) {
         case let .success((m, consumed)):
             meta = m
             // TODO: crashes without Data()
             data = Data(data.dropFirst(consumed))
-            
-        case .failure(let error):
+
+        case let .failure(error):
             return .failure(error)
         }
-        
+
         let header = Header(status: status, meta: meta)
         return .success(Response(header: header, data: data))
     }
