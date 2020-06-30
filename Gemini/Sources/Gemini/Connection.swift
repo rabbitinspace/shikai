@@ -1,25 +1,17 @@
 import Foundation
 import Network
 
-extension ConnectionTask {
-    public enum Error: Swift.Error {
-        public typealias ConnectionError = Network.NWError
-
-        case connection(ConnectionError)
-        case badRequestEncoding(Request)
-        case sendRequestFailed(ConnectionError)
-    }
-}
-
 public final class ConnectionTask {
     public typealias Completion = (Result<Response, Error>) -> Void
 
     private let connection: NWConnection
     private let request: Request
     private let completion: Completion
-
+    
     private let lock = OSLock()
-    private var isCancelled = false
+    private var state = State.ready
+    private var writer: RequestWriter?  // not thread-safe
+    private var reader: ResponseReader?  // not thread-safe
 
     init(connection: NWConnection, request: Request, completion: @escaping Completion) {
         self.connection = connection
@@ -27,139 +19,98 @@ public final class ConnectionTask {
         self.completion = completion
     }
 
-    func start(on _: DispatchQueue) {
+    func start(on queue: DispatchQueue) {
         connection.stateUpdateHandler = { [weak self] state in
+            guard let self = self else { return }
+
             switch state {
             case .ready:
-                guard self?.lock.whileLocked(do: { self?.isCancelled }) == false else { return }
-                self?.proceedWithRequest()
+                self.proceedWithRequest()
 
             case let .failed(error):
-                self?.connection.cancel()
-                self?.completion(.failure(.connection(error)))
-
-            case .cancelled:
-                self?.lock.whileLocked { self?.isCancelled = true }
+                self.finish(with: .failure(.connection(error)))
 
             default:
                 break // don't handle other cases for now
             }
         }
+        
+        connection.start(queue: queue)
     }
 
     public func cancel() {
-        lock.whileLocked { isCancelled = true }
+        lock.whileLocked { state = .cancelled }
+        
+        // cancelling will also call send/receive block with a cancelled posix error
         connection.cancel()
     }
 
-    private func proceedWithRequest() {
-        let writer = RequestWriter(connection: connection)
-        writer.writeRequest(request) { [weak self] result in
-            guard self?.lock.whileLocked(do: { self?.isCancelled }) == false else { return }
+    private func finish(with result: Result<Response, Error>) {
+        let currentState: State = lock.whileLocked {
+            let currentState = state
+            state = state == .ready ? .finished : state
+            return currentState
+        }
+        
+        guard currentState == .ready else { return }
 
+        // we need to cancel a connection to clean up resources
+        connection.cancel()
+        completion(result)
+    }
+
+    private func proceedWithRequest() {
+        guard lock.whileLocked(do: { state }) == .ready else { return }
+
+        writer = RequestWriter(connection: connection)
+        writer!.writeRequest(request) { [weak self] result in
             switch result {
             case let .success(reader):
                 self?.proceedWithResponse(reader)
 
             case let .failure(error):
-                // TODO: will there be a cancelled error?
-                self?.completion(.failure(error))
+                self?.finish(with: .failure(error))
             }
         }
     }
 
     private func proceedWithResponse(_ reader: ResponseReader) {
-        reader.readRequest { [weak self] result in
-            guard self?.lock.whileLocked(do: { self?.isCancelled }) == false else { return }
+        guard lock.whileLocked(do: { state }) == .ready else { return }
 
+        self.reader = reader
+        reader.readRequest { [weak self] result in
             switch result {
             case let .success(response):
-                self?.completion(.success(response))
+                self?.finish(with: .success(response))
 
             case let .failure(error):
-                self?.completion(.failure(error))
+                self?.finish(with: .failure(error))
             }
         }
     }
 }
 
-final class ConnectionBuilder {
-    // MARK: Properties
+extension ConnectionTask {
+    public enum Error: Swift.Error {
+        public typealias ConnectionError = Network.NWError
 
-    let url: URL
-
-    var ipFamily: GeminiClient.IPFamily?
-    var connectionTimeout: Int?
-    var connectionDropTime: Int?
-
-    // MARK: Init & deinit
-
-    init(url: URL, configuration: GeminiClient.Configuration? = nil) {
-        self.url = url
-
-        if let configuration = configuration {
-            ipFamily = configuration.ipFamily
-            connectionTimeout = configuration.connectionTimeout
-            connectionDropTime = configuration.connectionDropTime
-        }
+        case connection(ConnectionError)
+        case badRequestEncoding(Request)
+        case sendRequestFailed(ConnectionError)
+        case receiveResponseFailed(ConnectionError)
+        case incompleteResponse(Data?)
+        case invalidStatusCode(Data)
+        case badStatusCode(Int)
+        case badHeaderMeta(Data)
     }
-
-    // MARK: Methods
-
-    func build() -> NWConnection {
-        let endpoint = NWEndpoint.url(url)
-        let parameters = NWParameters.tls
-        setTLSOptions(parameters: parameters)
-        setTCPOptions(parameters: parameters)
-        setIPOptions(parameters: parameters)
-
-        return NWConnection(to: endpoint, using: parameters)
-    }
-
-    // MARK: Private configuration
-
-    private func setTLSOptions(parameters: NWParameters) {
-        let options = parameters.defaultProtocolStack.applicationProtocols.compactMap { $0 as? NWProtocolTLS.Options }
-        guard !options.isEmpty else { return }
-
-        let tls = options[0].securityProtocolOptions
-        sec_protocol_options_set_min_tls_protocol_version(tls, .TLSv12)
-        sec_protocol_options_set_max_tls_protocol_version(tls, .TLSv13)
-
-        if let host = url.host {
-            host.utf8CString.withUnsafeBufferPointer { buf in
-                if let ptr = buf.baseAddress {
-                    // TODO: will the func copy the string?
-                    sec_protocol_options_set_tls_server_name(tls, ptr)
-                }
-            }
-        }
-    }
-
-    private func setTCPOptions(parameters: NWParameters) {
-        guard let options = parameters.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options else {
-            return
-        }
-
-        if let connectionTimeout = connectionTimeout {
-            options.connectionTimeout = connectionTimeout
-        }
-
-        if let connectionDropTime = connectionDropTime {
-            options.connectionDropTime = connectionDropTime
-        }
-    }
-
-    private func setIPOptions(parameters: NWParameters) {
-        guard let options = parameters.defaultProtocolStack.internetProtocol as? NWProtocolIP.Options else {
-            return
-        }
-
-        if let ipFamily = ipFamily {
-            options.version = ipFamily
-        }
+    
+    private enum State {
+        case ready
+        case finished
+        case cancelled
     }
 }
+
 
 final class RequestWriter {
     private let connection: NWConnection
@@ -190,6 +141,8 @@ final class RequestWriter {
 }
 
 final class ResponseReader {
+    typealias Completion = (Result<Response, ConnectionTask.Error>) -> Void
+
     private let connection: NWConnection
     private let request: Request
 
@@ -198,5 +151,109 @@ final class ResponseReader {
         self.request = request
     }
 
-    func readRequest(with _: @escaping (Result<Response, ConnectionTask.Error>) -> Void) {}
+    // TODO: for now read the whole response instead of parsing on-the-fly
+    func readRequest(with completion: @escaping Completion) {
+        connection.receiveMessage { [weak self] data, _, isComplete, error in
+            guard let self = self else { return }
+
+            guard error == nil else {
+                completion(.failure(.receiveResponseFailed(error!)))
+                return
+            }
+
+            assert(isComplete, "receiving should be finished now")
+            guard let data = data else {
+                completion(.failure(.incompleteResponse(nil)))
+                return
+            }
+
+            completion(self.parseResponse(from: data))
+        }
+    }
+
+    private func parseResponse(from data: Data) -> Result<Response, ConnectionTask.Error> {
+        var data = data
+        
+        let status: Status
+        switch parseStatusCode(from: data) {
+        case let .success((s, consumed)):
+            status = s
+            // TODO: crashes without Data()
+            data = Data(data.dropFirst(consumed))
+            
+        case .failure(let error):
+            return .failure(error)
+        }
+        
+        let meta: String
+        switch parseMeta(from: data) {
+        case let .success((m, consumed)):
+            meta = m
+            // TODO: crashes without Data()
+            data = Data(data.dropFirst(consumed))
+            
+        case .failure(let error):
+            return .failure(error)
+        }
+        
+        let header = Header(status: status, meta: meta)
+        return .success(Response(header: header, data: data))
+    }
+}
+
+// MARK: - Internal functions
+
+func parseStatusCode(from data: Data) -> Result<(Status, Int), ConnectionTask.Error> {
+    guard data.count >= 3 else {
+        return .failure(.invalidStatusCode(data))
+    }
+
+    // header is utf-8 encoded, so digits are in interval from 48 to 57 and space is 32
+    let range: ClosedRange<UInt8> = 48 ... 57
+    guard range ~= data[0], range ~= data[1], data[2] == 32 else {
+        return .failure(.invalidStatusCode(data))
+    }
+
+    let code = Int((data[0] - range.lowerBound) * 10 + (data[1] - range.lowerBound))
+    let status = Status(rawValue: code)
+    return status.map { .success(($0, 3)) } ?? .failure(.badStatusCode(code))
+}
+
+func parseMeta(from data: Data) -> Result<(String, Int), ConnectionTask.Error> {
+    // max meta length is 1024 bytes
+    let metaMax = 1024
+    let cr = 13
+    let lf = 10
+
+    var metaEnd = 0
+    while metaEnd <= metaMax, metaEnd < data.count {
+        // we need to find a CRLF sequence
+        guard data[metaEnd] == cr || data[metaEnd] == lf else {
+            metaEnd += 2
+            continue
+        }
+
+        if data[metaEnd] == cr, metaEnd + 1 < data.count, data[metaEnd + 1] == lf {
+            metaEnd += 1
+            break
+        } else if data[metaEnd] == lf, metaEnd - 1 >= 0, data[metaEnd - 1] == cr {
+            break
+        } else {
+            metaEnd += 2
+        }
+    }
+
+    guard metaEnd >= 1, metaEnd <= metaMax else {
+        return .failure(.badHeaderMeta(data))
+    }
+
+    if metaEnd == 1 {
+        return .success(("", metaEnd + 1))
+    }
+
+    guard let meta = String(bytes: data[0 ... metaEnd - 2], encoding: .utf8) else {
+        return .failure(.badHeaderMeta(data))
+    }
+
+    return .success((meta, metaEnd + 1))
 }
