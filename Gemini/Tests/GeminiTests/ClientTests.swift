@@ -4,7 +4,7 @@ import XCTest
 final class ClientTests: XCTestCase {
     func testExample() {
         let client = GeminiClient()
-        let request = Request(url: URL(string: "gemini://gemini.circumlunar.space:1965/")!)
+        let request = GeminiRequest(url: URL(string: "gemini://gemini.circumlunar.space:1965/")!)
 
         let waiter = expectation(description: "request")
         let task = client.send(request) { result in

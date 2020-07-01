@@ -2,7 +2,7 @@ import Foundation
 import Network
 
 /// A client that can send requests via Gemini protocol.
-public final class GeminiClient {
+public class GeminiClient {
     // MARK: Public properties
 
     /// Configuration for the current client.
@@ -20,13 +20,35 @@ public final class GeminiClient {
     ///   - request: the request to send.
     ///   - completion: closure to call on response or on request error.
     /// - Returns: an in-progress task that manages a connection on behalf of the `request`.
-    public func send(_ request: Request, completion: @escaping SendCompletion) -> ConnectionTask {
-        let builder = ConnectionBuilder(url: request.url, configuration: configuration)
+    @discardableResult
+    public func send(_ request: GeminiRequest, completion: @escaping SendCompletion) -> ConnectionTask {
+        let builder = makeConnectionBuilder(for: request, configuration: configuration)
         let connection = builder.build()
+        
+        // get privacy context to flush caches if needed
+        let context = builder.privacyContext
+        let shouldFlushCaches = configuration.requiresFlushingCaches
 
         let task = ConnectionTask(connection: connection, request: request, completion: completion)
+        task.setTaskCompletion { [task] in
+            if let context = context, shouldFlushCaches {
+                context.flushCache()
+            }
+            
+            // TODO: check retain cycle
+            // release the task.
+            task.setTaskCompletion(nil)
+        }
+        
         task.start(on: configuration.queue)
         return task
+    }
+    
+    // MARK: Internal methods
+    
+    /// Creates and returns a new builder object which can create and configure a `NWConnection` for the given `request` and client `configuration`.
+    func makeConnectionBuilder(for request: GeminiRequest, configuration: Configuration) -> ConnectionBuilder {
+        ConnectionBuilder(url: request.url, configuration: configuration)
     }
 }
 
@@ -57,10 +79,20 @@ extension GeminiClient {
 
         /// A queue to use for sending a request and receiving a response.
         public var queue = DispatchQueue(label: "gemini.client", qos: .userInitiated, attributes: .concurrent)
+        
+        /// Indicates that system logging for a TCP connection must be disabled.
+        ///
+        /// Set this value to `false` to leave a default behaviour.
+        public var requiresDisablingLogging = false
+        
+        /// Indicates that TCP connection caches must be flushed after connection is closed.
+        ///
+        /// Set this value to `false` to leave a default behaviour.
+        public var requiresFlushingCaches = false
     }
 }
 
-// MARK: - internal types
+// MARK: - Internal types
 
 /// Creates a NWConnection instances based on Gemini client configuration.
 final class ConnectionBuilder {
@@ -77,6 +109,12 @@ final class ConnectionBuilder {
 
     /// TCP packet retransmission timeout.
     var connectionDropTime: Int?
+    
+    /// Disables TCP connection logging.
+    var disableLogging: Bool?
+    
+    /// A privacy context used to create last connection.
+    private(set) var privacyContext: NWParameters.PrivacyContext?
 
     // MARK: Init & deinit
 
@@ -88,6 +126,7 @@ final class ConnectionBuilder {
             ipFamily = configuration.ipFamily
             connectionTimeout = Int(configuration.connectionTimeout)
             connectionDropTime = Int(configuration.connectionDropTime)
+            disableLogging = configuration.requiresDisablingLogging
         }
     }
 
@@ -100,6 +139,7 @@ final class ConnectionBuilder {
         setTLSOptions(parameters: parameters)
         setTCPOptions(parameters: parameters)
         setIPOptions(parameters: parameters)
+        setPrivacyOptions(parameters: parameters)
 
         return NWConnection(to: endpoint, using: parameters)
     }
@@ -150,5 +190,16 @@ final class ConnectionBuilder {
         if let ipFamily = ipFamily {
             options.version = ipFamily
         }
+    }
+    
+    /// Sets required privacy options in the `parameters` object.
+    private func setPrivacyOptions(parameters: NWParameters) {
+        let context = NWParameters.PrivacyContext(description: "Gemini Request")
+        if disableLogging == true {
+            context.disableLogging()
+        }
+        
+        parameters.setPrivacyContext(context)
+        privacyContext = context
     }
 }

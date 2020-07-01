@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Status: Int {
+public enum GeminiStatus: Int {
     case input = 10
     case sensitiveInput = 11
 
@@ -24,4 +24,23 @@ public enum Status: Int {
     case clientCertificateRequired = 60
     case certificateNotAuthorised = 61
     case certificateNotValid = 62
+}
+
+public extension GeminiStatus {
+    enum StatusType: Int {
+        case input = 1
+        case success
+        case redirect
+        case temporaryFailire
+        case permanentFailure
+        case certificateRequired
+    }
+    
+    var type: StatusType {
+        guard let type = StatusType(rawValue: rawValue / 10) else {
+            preconditionFailure("Status \(rawValue) is not defined")
+        }
+        
+        return type
+    }
 }

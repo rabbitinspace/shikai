@@ -1,11 +1,7 @@
 import Foundation
 
-public struct Header {
-    public let status: Status
-    public let meta: String
-}
-
-public struct Request {
+public struct GeminiRequest {
+    public let id = UUID()
     public let url: URL
 
     public init(url: URL) {
@@ -33,7 +29,12 @@ public struct Request {
     }
 }
 
-public struct Response {
+public struct GeminiResponse {
+    public struct Header {
+        public let status: GeminiStatus
+        public let meta: String
+    }
+
     public let header: Header
     public let data: Data
 }
