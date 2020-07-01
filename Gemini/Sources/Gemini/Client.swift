@@ -24,7 +24,7 @@ public class GeminiClient {
     public func send(_ request: GeminiRequest, completion: @escaping SendCompletion) -> ConnectionTask {
         let builder = makeConnectionBuilder(for: request, configuration: configuration)
         let connection = builder.build()
-        
+
         // get privacy context to flush caches if needed
         let context = builder.privacyContext
         let shouldFlushCaches = configuration.requiresFlushingCaches
@@ -34,18 +34,17 @@ public class GeminiClient {
             if let context = context, shouldFlushCaches {
                 context.flushCache()
             }
-            
-            // TODO: check retain cycle
-            // release the task.
+
+            // break the retain cycle
             task.setTaskCompletion(nil)
         }
-        
+
         task.start(on: configuration.queue)
         return task
     }
-    
+
     // MARK: Internal methods
-    
+
     /// Creates and returns a new builder object which can create and configure a `NWConnection` for the given `request` and client `configuration`.
     func makeConnectionBuilder(for request: GeminiRequest, configuration: Configuration) -> ConnectionBuilder {
         ConnectionBuilder(url: request.url, configuration: configuration)
@@ -79,12 +78,12 @@ extension GeminiClient {
 
         /// A queue to use for sending a request and receiving a response.
         public var queue = DispatchQueue(label: "gemini.client", qos: .userInitiated, attributes: .concurrent)
-        
+
         /// Indicates that system logging for a TCP connection must be disabled.
         ///
         /// Set this value to `false` to leave a default behaviour.
         public var requiresDisablingLogging = false
-        
+
         /// Indicates that TCP connection caches must be flushed after connection is closed.
         ///
         /// Set this value to `false` to leave a default behaviour.
@@ -109,10 +108,10 @@ final class ConnectionBuilder {
 
     /// TCP packet retransmission timeout.
     var connectionDropTime: Int?
-    
+
     /// Disables TCP connection logging.
     var disableLogging: Bool?
-    
+
     /// A privacy context used to create last connection.
     private(set) var privacyContext: NWParameters.PrivacyContext?
 
@@ -191,14 +190,14 @@ final class ConnectionBuilder {
             options.version = ipFamily
         }
     }
-    
+
     /// Sets required privacy options in the `parameters` object.
     private func setPrivacyOptions(parameters: NWParameters) {
         let context = NWParameters.PrivacyContext(description: "Gemini Request")
         if disableLogging == true {
             context.disableLogging()
         }
-        
+
         parameters.setPrivacyContext(context)
         privacyContext = context
     }

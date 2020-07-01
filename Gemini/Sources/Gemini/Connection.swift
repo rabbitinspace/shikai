@@ -4,9 +4,9 @@ import Network
 public final class ConnectionTask: Identifiable {
     public typealias Completion = (Result<GeminiResponse, Error>) -> Void
     public typealias TaskCompletion = () -> Void
-    
+
     public var id: UUID {
-        return request.id
+        request.id
     }
 
     let connection: NWConnection
@@ -17,7 +17,7 @@ public final class ConnectionTask: Identifiable {
     private var state = State.ready
     private var writer: RequestWriter? // not thread-safe
     private var reader: ResponseReader? // not thread-safe
-    
+
     private var taskCompletion: TaskCompletion?
 
     init(connection: NWConnection, request: GeminiRequest, completion: @escaping Completion) {
@@ -37,7 +37,7 @@ public final class ConnectionTask: Identifiable {
             case let .failed(error):
                 self.finish(with: .failure(.connection(error)))
                 self.callTaskCompletion()
-                
+
             case .cancelled:
                 self.callTaskCompletion()
 
@@ -55,7 +55,7 @@ public final class ConnectionTask: Identifiable {
         // cancelling will also call send/receive block with a cancelled posix error
         connection.cancel()
     }
-    
+
     /// Sets a completion handler which will be called after the task has finished it job even if it was cancelled.
     func setTaskCompletion(_ completion: TaskCompletion?) {
         lock.whileLocked { taskCompletion = completion }
@@ -104,19 +104,14 @@ public final class ConnectionTask: Identifiable {
             }
         }
     }
-    
+
     private func callTaskCompletion() {
         let completion: TaskCompletion? = lock.whileLocked {
             let completion = taskCompletion
             taskCompletion = nil
-            
-            if state == .ready {
-                state = .finished
-            }
-            
             return completion
         }
-        
+
         completion?()
     }
 }
@@ -132,7 +127,7 @@ extension ConnectionTask {
         case incompleteResponse(Data?)
         case invalidStatusCode(Data)
         case badStatusCode(Int)
-        case badHeaderMeta(Data)
+        case badHeaderMeta(String?)
     }
 
     private enum State {
@@ -274,7 +269,7 @@ func parseMeta(from data: Data) -> Result<(String, Int), ConnectionTask.Error> {
     }
 
     guard metaEnd >= 1, metaEnd <= metaMax else {
-        return .failure(.badHeaderMeta(data))
+        return .failure(.badHeaderMeta(nil))
     }
 
     if metaEnd == 1 {
@@ -282,7 +277,7 @@ func parseMeta(from data: Data) -> Result<(String, Int), ConnectionTask.Error> {
     }
 
     guard let meta = String(bytes: data[0 ... metaEnd - 2], encoding: .utf8) else {
-        return .failure(.badHeaderMeta(data))
+        return .failure(.badHeaderMeta(nil))
     }
 
     return .success((meta, metaEnd + 1))

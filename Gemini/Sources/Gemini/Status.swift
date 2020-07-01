@@ -35,12 +35,12 @@ public extension GeminiStatus {
         case permanentFailure
         case certificateRequired
     }
-    
+
     var type: StatusType {
         guard let type = StatusType(rawValue: rawValue / 10) else {
             preconditionFailure("Status \(rawValue) is not defined")
         }
-        
+
         return type
     }
 }

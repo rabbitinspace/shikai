@@ -4,10 +4,11 @@ import XCTest
 final class ClientTests: XCTestCase {
     func testExample() {
         let client = GeminiClient()
-        let request = GeminiRequest(url: URL(string: "gemini://gemini.circumlunar.space:1965/")!)
+        let session = GeminiSession(client: client)
+        let request = GeminiRequest(url: URL(string: "gemini://gemini.circumlunar.space")!)
 
         let waiter = expectation(description: "request")
-        let task = client.send(request) { result in
+        session.send(request) { result in
             switch result {
             case let .success(response):
                 print(response)
