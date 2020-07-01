@@ -8,13 +8,13 @@ public struct GeminiRequest {
         self.url = url
     }
 
-    func withURL(_ url: URL) -> GeminiRequest {
+    func withURL(_ newURL: URL) -> GeminiRequest {
         var request = self
-        var newURL = url
+        var newURL = newURL
 
         // that should probably mean that url is relative
         if newURL.scheme == nil {
-            newURL = URL(string: url.relativeString, relativeTo: request.url) ?? url
+            newURL = URL(string: newURL.relativeString, relativeTo: request.url) ?? url
         }
 
         request.url = newURL
