@@ -10,8 +10,8 @@ public class GeminiSession {
     }
 
     @discardableResult
-    public func send(_ request: GeminiRequest, completion: @escaping SendCompletion) -> SessionTask {
-        let sessionTask = SessionTask()
+    public func send(_ request: GeminiRequest, completion: @escaping SendCompletion) -> Task {
+        let sessionTask = Task()
         let task = sendDetachedRequest(request) { [weak self, sessionTask] result in
             switch result {
             case let .success(response):
@@ -29,7 +29,7 @@ public class GeminiSession {
     private func handleResponse(
         _ response: GeminiResponse,
         from request: GeminiRequest,
-        task: SessionTask,
+        task: Task,
         completion: @escaping SendCompletion
     ) {
         switch response.header.status.type {
@@ -51,7 +51,7 @@ public class GeminiSession {
     private func redirect(
         from request: GeminiRequest,
         for response: GeminiResponse,
-        task: SessionTask,
+        task: Task,
         completion: @escaping SendCompletion
     ) {
         guard let newURL = URL(string: response.header.meta) else {
@@ -80,30 +80,32 @@ public class GeminiSession {
     }
 }
 
-public final class SessionTask {
-    private let lock = OSLock()
-    private var task: ConnectionTask?
-    private var isCancelled = false
+extension GeminiSession {
+    public final class Task {
+        private let lock = OSLock()
+        private var task: ConnectionTask?
+        private var isCancelled = false
 
-    public func cancel() {
-        lock.whileLocked {
-            if !isCancelled {
-                isCancelled = true
-                task?.cancel()
-                task = nil
+        public func cancel() {
+            lock.whileLocked {
+                if !isCancelled {
+                    isCancelled = true
+                    task?.cancel()
+                    task = nil
+                }
             }
         }
-    }
 
-    @discardableResult
-    func replaceConnectionTask(_ task: ConnectionTask?) -> Bool {
-        lock.whileLocked {
-            if !isCancelled {
-                self.task = task
-                return true
+        @discardableResult
+        func replaceConnectionTask(_ task: ConnectionTask?) -> Bool {
+            lock.whileLocked {
+                if !isCancelled {
+                    self.task = task
+                    return true
+                }
+
+                return false
             }
-
-            return false
         }
     }
 }

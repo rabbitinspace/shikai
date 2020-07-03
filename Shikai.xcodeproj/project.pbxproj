@@ -3,97 +3,172 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9BA1445124A8D17900E0E97C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA1445024A8D17900E0E97C /* AppDelegate.swift */; };
-		9BA1445324A8D17900E0E97C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA1445224A8D17900E0E97C /* ContentView.swift */; };
-		9BA1445524A8D17A00E0E97C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BA1445424A8D17A00E0E97C /* Assets.xcassets */; };
-		9BA1445824A8D17A00E0E97C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BA1445724A8D17A00E0E97C /* Preview Assets.xcassets */; };
-		9BA1445B24A8D17A00E0E97C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BA1445924A8D17A00E0E97C /* Main.storyboard */; };
+		9B50512924AF3A7C00D89A76 /* GeminiBrowserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50512824AF3A7C00D89A76 /* GeminiBrowserController.swift */; };
+		9B50512C24AF3AEC00D89A76 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50512B24AF3AEC00D89A76 /* Localization.swift */; };
+		9B50513024AF3EE800D89A76 /* GeminiURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50512F24AF3EE800D89A76 /* GeminiURLProtocol.swift */; };
+		9B50513324AF433A00D89A76 /* Gemini in Frameworks */ = {isa = PBXBuildFile; productRef = 9B50513224AF433A00D89A76 /* Gemini */; };
+		9B50513624AF57DE00D89A76 /* OSLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50513524AF57DE00D89A76 /* OSLock.swift */; };
+		9B990B3A24AF39050069DE77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B990B3924AF39050069DE77 /* AppDelegate.swift */; };
+		9BF02CF724AF375200CDE400 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BF02CF624AF375200CDE400 /* Assets.xcassets */; };
+		9BF02CFA24AF375200CDE400 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BF02CF824AF375200CDE400 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9B50512824AF3A7C00D89A76 /* GeminiBrowserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiBrowserController.swift; sourceTree = "<group>"; };
+		9B50512B24AF3AEC00D89A76 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+		9B50512F24AF3EE800D89A76 /* GeminiURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiURLProtocol.swift; sourceTree = "<group>"; };
+		9B50513524AF57DE00D89A76 /* OSLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OSLock.swift; path = Gemini/Sources/Gemini/OSLock.swift; sourceTree = SOURCE_ROOT; };
+		9B990B3924AF39050069DE77 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B9E772824A8D91200D0B0FA /* Gemini */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Gemini; sourceTree = "<group>"; };
-		9BA1444D24A8D17900E0E97C /* Shikai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shikai.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9BA1445024A8D17900E0E97C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9BA1445224A8D17900E0E97C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		9BA1445424A8D17A00E0E97C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9BA1445724A8D17A00E0E97C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		9BA1445A24A8D17A00E0E97C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9BA1445C24A8D17A00E0E97C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9BA1445D24A8D17A00E0E97C /* Shikai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shikai.entitlements; sourceTree = "<group>"; };
+		9BF02CF024AF375100CDE400 /* Shikai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shikai.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BF02CF624AF375200CDE400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9BF02CF924AF375200CDE400 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9BF02CFB24AF375200CDE400 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9BF02CFC24AF375200CDE400 /* Shikai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shikai.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9BA1444A24A8D17900E0E97C /* Frameworks */ = {
+		9BF02CED24AF375100CDE400 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B50513324AF433A00D89A76 /* Gemini in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9B50512A24AF3AD800D89A76 /* Localizable */ = {
+			isa = PBXGroup;
+			children = (
+				9B50512B24AF3AEC00D89A76 /* Localization.swift */,
+			);
+			path = Localizable;
+			sourceTree = "<group>";
+		};
+		9B50512D24AF3BC000D89A76 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9B50513424AF57A200D89A76 /* Common */,
+				9B50512E24AF3BC800D89A76 /* Networking */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9B50512E24AF3BC800D89A76 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				9B50512F24AF3EE800D89A76 /* GeminiURLProtocol.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		9B50513124AF433A00D89A76 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9B50513424AF57A200D89A76 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				9B50513524AF57DE00D89A76 /* OSLock.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		9B990B3B24AF391C0069DE77 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				9B990B3C24AF39580069DE77 /* Browser */,
+				9BF02CF824AF375200CDE400 /* Main.storyboard */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		9B990B3C24AF39580069DE77 /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+				9B50512824AF3A7C00D89A76 /* GeminiBrowserController.swift */,
+			);
+			path = Browser;
+			sourceTree = "<group>";
+		};
 		9BA1444424A8D17900E0E97C = {
 			isa = PBXGroup;
 			children = (
 				9B9E772824A8D91200D0B0FA /* Gemini */,
-				9BA1444F24A8D17900E0E97C /* Shikai */,
+				9BF02CF124AF375100CDE400 /* Shikai */,
 				9BA1444E24A8D17900E0E97C /* Products */,
+				9B50513124AF433A00D89A76 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		9BA1444E24A8D17900E0E97C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9BA1444D24A8D17900E0E97C /* Shikai.app */,
+				9BF02CF024AF375100CDE400 /* Shikai.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9BA1444F24A8D17900E0E97C /* Shikai */ = {
+		9BF02CF124AF375100CDE400 /* Shikai */ = {
 			isa = PBXGroup;
 			children = (
-				9BA1445024A8D17900E0E97C /* AppDelegate.swift */,
-				9BA1445224A8D17900E0E97C /* ContentView.swift */,
-				9BA1445424A8D17A00E0E97C /* Assets.xcassets */,
-				9BA1445924A8D17A00E0E97C /* Main.storyboard */,
-				9BA1445C24A8D17A00E0E97C /* Info.plist */,
-				9BA1445D24A8D17A00E0E97C /* Shikai.entitlements */,
-				9BA1445624A8D17A00E0E97C /* Preview Content */,
+				9BF02D0024AF386000CDE400 /* App */,
+				9B990B3B24AF391C0069DE77 /* UI */,
+				9B50512D24AF3BC000D89A76 /* Model */,
+				9BF02D0124AF386500CDE400 /* Resources */,
 			);
 			path = Shikai;
 			sourceTree = "<group>";
 		};
-		9BA1445624A8D17A00E0E97C /* Preview Content */ = {
+		9BF02D0024AF386000CDE400 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				9BA1445724A8D17A00E0E97C /* Preview Assets.xcassets */,
+				9B990B3924AF39050069DE77 /* AppDelegate.swift */,
 			);
-			path = "Preview Content";
+			path = App;
+			sourceTree = "<group>";
+		};
+		9BF02D0124AF386500CDE400 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9B50512A24AF3AD800D89A76 /* Localizable */,
+				9BF02CF624AF375200CDE400 /* Assets.xcassets */,
+				9BF02CFB24AF375200CDE400 /* Info.plist */,
+				9BF02CFC24AF375200CDE400 /* Shikai.entitlements */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9BA1444C24A8D17900E0E97C /* Shikai */ = {
+		9BF02CEF24AF375100CDE400 /* Shikai */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9BA1446024A8D17A00E0E97C /* Build configuration list for PBXNativeTarget "Shikai" */;
+			buildConfigurationList = 9BF02CFD24AF375200CDE400 /* Build configuration list for PBXNativeTarget "Shikai" */;
 			buildPhases = (
-				9BA1444924A8D17900E0E97C /* Sources */,
-				9BA1444A24A8D17900E0E97C /* Frameworks */,
-				9BA1444B24A8D17900E0E97C /* Resources */,
+				9BF02CEC24AF375100CDE400 /* Sources */,
+				9BF02CED24AF375100CDE400 /* Frameworks */,
+				9BF02CEE24AF375100CDE400 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Shikai;
+			packageProductDependencies = (
+				9B50513224AF433A00D89A76 /* Gemini */,
+			);
 			productName = Shikai;
-			productReference = 9BA1444D24A8D17900E0E97C /* Shikai.app */;
+			productReference = 9BF02CF024AF375100CDE400 /* Shikai.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,13 +180,13 @@
 				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
-					9BA1444C24A8D17900E0E97C = {
+					9BF02CEF24AF375100CDE400 = {
 						CreatedOnToolsVersion = 12.0;
 					};
 				};
 			};
 			buildConfigurationList = 9BA1444824A8D17900E0E97C /* Build configuration list for PBXProject "Shikai" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -123,41 +198,43 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9BA1444C24A8D17900E0E97C /* Shikai */,
+				9BF02CEF24AF375100CDE400 /* Shikai */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		9BA1444B24A8D17900E0E97C /* Resources */ = {
+		9BF02CEE24AF375100CDE400 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BA1445B24A8D17A00E0E97C /* Main.storyboard in Resources */,
-				9BA1445824A8D17A00E0E97C /* Preview Assets.xcassets in Resources */,
-				9BA1445524A8D17A00E0E97C /* Assets.xcassets in Resources */,
+				9BF02CF724AF375200CDE400 /* Assets.xcassets in Resources */,
+				9BF02CFA24AF375200CDE400 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		9BA1444924A8D17900E0E97C /* Sources */ = {
+		9BF02CEC24AF375100CDE400 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BA1445324A8D17900E0E97C /* ContentView.swift in Sources */,
-				9BA1445124A8D17900E0E97C /* AppDelegate.swift in Sources */,
+				9B50513024AF3EE800D89A76 /* GeminiURLProtocol.swift in Sources */,
+				9B990B3A24AF39050069DE77 /* AppDelegate.swift in Sources */,
+				9B50513624AF57DE00D89A76 /* OSLock.swift in Sources */,
+				9B50512924AF3A7C00D89A76 /* GeminiBrowserController.swift in Sources */,
+				9B50512C24AF3AEC00D89A76 /* Localization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9BA1445924A8D17A00E0E97C /* Main.storyboard */ = {
+		9BF02CF824AF375200CDE400 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9BA1445A24A8D17A00E0E97C /* Base */,
+				9BF02CF924AF375200CDE400 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -280,48 +357,42 @@
 			};
 			name = Release;
 		};
-		9BA1446124A8D17A00E0E97C /* Debug */ = {
+		9BF02CFE24AF375200CDE400 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Shikai/Shikai.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Shikai/Resources/Shikai.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"Shikai/Preview Content\"";
 				DEVELOPMENT_TEAM = WEM6WW7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Shikai/Info.plist;
+				INFOPLIST_FILE = Shikai/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = moe.shitty.Shikai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		9BA1446224A8D17A00E0E97C /* Release */ = {
+		9BF02CFF24AF375200CDE400 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Shikai/Shikai.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Shikai/Resources/Shikai.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"Shikai/Preview Content\"";
 				DEVELOPMENT_TEAM = WEM6WW7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Shikai/Info.plist;
+				INFOPLIST_FILE = Shikai/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = moe.shitty.Shikai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -340,16 +411,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9BA1446024A8D17A00E0E97C /* Build configuration list for PBXNativeTarget "Shikai" */ = {
+		9BF02CFD24AF375200CDE400 /* Build configuration list for PBXNativeTarget "Shikai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9BA1446124A8D17A00E0E97C /* Debug */,
-				9BA1446224A8D17A00E0E97C /* Release */,
+				9BF02CFE24AF375200CDE400 /* Debug */,
+				9BF02CFF24AF375200CDE400 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9B50513224AF433A00D89A76 /* Gemini */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Gemini;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9BA1444524A8D17900E0E97C /* Project object */;
 }
