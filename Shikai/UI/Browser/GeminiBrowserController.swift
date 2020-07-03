@@ -15,7 +15,7 @@ final class GeminiBrowserController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let request = URLRequest(url: URL(string: "gemini://gemini.circumlunar.space")!)
+        let request = URLRequest(url: URL(string: "gemini://rawtext.club:1965/~sloum/spacewalk.gmi")!)
         webView.load(request)
     }
 }

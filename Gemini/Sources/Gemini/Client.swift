@@ -88,6 +88,9 @@ extension GeminiClient {
         ///
         /// Set this value to `false` to leave a default behaviour.
         public var requiresFlushingCaches = false
+        
+        /// Trust an invalid TLS certificate on first use instead of rejecting it.
+        public var enableTOFU = true
     }
 }
 
@@ -111,6 +114,12 @@ final class ConnectionBuilder {
 
     /// Disables TCP connection logging.
     var disableLogging: Bool?
+    
+    /// Wherever to enable "Trust On First Use" pinning system.
+    var enableTOFU: Bool?
+    
+    /// Queue for validating TLS certificates.
+    var tlsValidationQueue: DispatchQueue?
 
     /// A privacy context used to create last connection.
     private(set) var privacyContext: NWParameters.PrivacyContext?
@@ -126,6 +135,8 @@ final class ConnectionBuilder {
             connectionTimeout = Int(configuration.connectionTimeout)
             connectionDropTime = Int(configuration.connectionDropTime)
             disableLogging = configuration.requiresDisablingLogging
+            enableTOFU = configuration.enableTOFU
+            tlsValidationQueue = configuration.queue
         }
     }
 
@@ -162,6 +173,14 @@ final class ConnectionBuilder {
                     sec_protocol_options_set_tls_server_name(tls, ptr)
                 }
             }
+        }
+        
+        if enableTOFU == true {
+            sec_protocol_options_set_verify_block(tls, { metadata, trust, completion in
+                let trust = sec_trust_copy_ref(trust).takeRetainedValue()
+                
+                completion(true)
+            }, tlsValidationQueue ?? .global())
         }
     }
 
