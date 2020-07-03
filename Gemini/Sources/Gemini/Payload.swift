@@ -5,7 +5,21 @@ public struct GeminiRequest {
     public private(set) var url: URL
 
     public init(url: URL) {
-        self.url = url
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            preconditionFailure("not a url: \(url)")
+        }
+
+        if components.scheme == nil {
+            components.scheme = "gemini"
+        }
+
+        if components.port == nil {
+            components.port = 1965
+        }
+
+        precondition(components.scheme == "gemini", "only gemini scheme is supported")
+        precondition(components.host?.isEmpty == false, "host is required")
+        self.url = components.url!
     }
 
     func withURL(_ newURL: URL) -> GeminiRequest {

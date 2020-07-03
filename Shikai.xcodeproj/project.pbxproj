@@ -9,24 +9,24 @@
 /* Begin PBXBuildFile section */
 		9B50512924AF3A7C00D89A76 /* GeminiBrowserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50512824AF3A7C00D89A76 /* GeminiBrowserController.swift */; };
 		9B50512C24AF3AEC00D89A76 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50512B24AF3AEC00D89A76 /* Localization.swift */; };
-		9B50513024AF3EE800D89A76 /* GeminiURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50512F24AF3EE800D89A76 /* GeminiURLProtocol.swift */; };
+		9B50513024AF3EE800D89A76 /* GeminiSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50512F24AF3EE800D89A76 /* GeminiSchemeHandler.swift */; };
 		9B50513324AF433A00D89A76 /* Gemini in Frameworks */ = {isa = PBXBuildFile; productRef = 9B50513224AF433A00D89A76 /* Gemini */; };
 		9B50513624AF57DE00D89A76 /* OSLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50513524AF57DE00D89A76 /* OSLock.swift */; };
+		9B50515724AF5A9F00D89A76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B50515524AF5A9F00D89A76 /* Main.storyboard */; };
 		9B990B3A24AF39050069DE77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B990B3924AF39050069DE77 /* AppDelegate.swift */; };
 		9BF02CF724AF375200CDE400 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BF02CF624AF375200CDE400 /* Assets.xcassets */; };
-		9BF02CFA24AF375200CDE400 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BF02CF824AF375200CDE400 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9B50512824AF3A7C00D89A76 /* GeminiBrowserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiBrowserController.swift; sourceTree = "<group>"; };
 		9B50512B24AF3AEC00D89A76 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
-		9B50512F24AF3EE800D89A76 /* GeminiURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiURLProtocol.swift; sourceTree = "<group>"; };
+		9B50512F24AF3EE800D89A76 /* GeminiSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiSchemeHandler.swift; sourceTree = "<group>"; };
 		9B50513524AF57DE00D89A76 /* OSLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OSLock.swift; path = Gemini/Sources/Gemini/OSLock.swift; sourceTree = SOURCE_ROOT; };
+		9B50515624AF5A9F00D89A76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9B990B3924AF39050069DE77 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B9E772824A8D91200D0B0FA /* Gemini */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Gemini; sourceTree = "<group>"; };
 		9BF02CF024AF375100CDE400 /* Shikai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shikai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BF02CF624AF375200CDE400 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9BF02CF924AF375200CDE400 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9BF02CFB24AF375200CDE400 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9BF02CFC24AF375200CDE400 /* Shikai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shikai.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -63,7 +63,7 @@
 		9B50512E24AF3BC800D89A76 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				9B50512F24AF3EE800D89A76 /* GeminiURLProtocol.swift */,
+				9B50512F24AF3EE800D89A76 /* GeminiSchemeHandler.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -86,8 +86,8 @@
 		9B990B3B24AF391C0069DE77 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				9B50515524AF5A9F00D89A76 /* Main.storyboard */,
 				9B990B3C24AF39580069DE77 /* Browser */,
-				9BF02CF824AF375200CDE400 /* Main.storyboard */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -209,7 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BF02CF724AF375200CDE400 /* Assets.xcassets in Resources */,
-				9BF02CFA24AF375200CDE400 /* Main.storyboard in Resources */,
+				9B50515724AF5A9F00D89A76 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,7 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B50513024AF3EE800D89A76 /* GeminiURLProtocol.swift in Sources */,
+				9B50513024AF3EE800D89A76 /* GeminiSchemeHandler.swift in Sources */,
 				9B990B3A24AF39050069DE77 /* AppDelegate.swift in Sources */,
 				9B50513624AF57DE00D89A76 /* OSLock.swift in Sources */,
 				9B50512924AF3A7C00D89A76 /* GeminiBrowserController.swift in Sources */,
@@ -231,10 +231,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9BF02CF824AF375200CDE400 /* Main.storyboard */ = {
+		9B50515524AF5A9F00D89A76 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9BF02CF924AF375200CDE400 /* Base */,
+				9B50515624AF5A9F00D89A76 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
