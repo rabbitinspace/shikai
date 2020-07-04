@@ -9,17 +9,17 @@ final class MIMETests: XCTestCase {
     }
 
     func testTextWithCharset() {
-        let mime: MIME = "text/plain; charset=UTF-8"
+        let mime: MIME = "text/plain; charset=utf-8"
         XCTAssertEqual(mime.name, "text/plain")
         XCTAssertEqual(mime.parameters.count, 1)
-        XCTAssertEqual(mime.parameters[0], MIME.Parameters(name: "charset", value: "UTF-8"))
+        XCTAssertEqual(mime.parameters[0], MIME.Parameters(name: "charset", value: "utf-8"))
     }
 
     func testTextWithCharsetAndSpaces() {
-        let mime: MIME = "text/plain;            charset=UTF-8  "
+        let mime: MIME = "text/plain;            charset=utf-8  "
         XCTAssertEqual(mime.name, "text/plain")
         XCTAssertEqual(mime.parameters.count, 1)
-        XCTAssertEqual(mime.parameters[0], MIME.Parameters(name: "charset", value: "UTF-8  "))
+        XCTAssertEqual(mime.parameters[0], MIME.Parameters(name: "charset", value: "utf-8  "))
     }
 
     func testMultipleParameters() {
@@ -32,7 +32,8 @@ final class MIMETests: XCTestCase {
 
     func testEmpty() {
         let mime: MIME = ""
-        XCTAssertTrue(mime.name.isEmpty)
-        XCTAssertTrue(mime.parameters.isEmpty)
+        XCTAssertEqual(mime.name, "text/gemini")
+        XCTAssertEqual(mime.parameters.count, 1)
+        XCTAssertEqual(mime.parameters[0], MIME.Parameters(name: "charset", value: "utf-8"))
     }
 }

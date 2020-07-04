@@ -94,6 +94,12 @@ private func parseMIME(from string: String) -> MIME {
 
         break
     }
+    
+    // default mime type is gemini in utf8
+    if name.isEmpty {
+        name = "text/gemini"
+        parameters.append(MIME.Parameters(name: "charset", value: "utf-8"))
+    }
 
     return MIME(name: name, parameters: parameters)
 }

@@ -13,6 +13,7 @@
 		9B50513324AF433A00D89A76 /* Gemini in Frameworks */ = {isa = PBXBuildFile; productRef = 9B50513224AF433A00D89A76 /* Gemini */; };
 		9B50513624AF57DE00D89A76 /* OSLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B50513524AF57DE00D89A76 /* OSLock.swift */; };
 		9B50515724AF5A9F00D89A76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B50515524AF5A9F00D89A76 /* Main.storyboard */; };
+		9B77C6EC24B02A38006C2632 /* Glup in Frameworks */ = {isa = PBXBuildFile; productRef = 9B77C6EB24B02A38006C2632 /* Glup */; };
 		9B990B3A24AF39050069DE77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B990B3924AF39050069DE77 /* AppDelegate.swift */; };
 		9BF02CF724AF375200CDE400 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BF02CF624AF375200CDE400 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -23,6 +24,7 @@
 		9B50512F24AF3EE800D89A76 /* GeminiSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiSchemeHandler.swift; sourceTree = "<group>"; };
 		9B50513524AF57DE00D89A76 /* OSLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OSLock.swift; path = Gemini/Sources/Gemini/OSLock.swift; sourceTree = SOURCE_ROOT; };
 		9B50515624AF5A9F00D89A76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9B74098424B01ACB00C6A013 /* Glup */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Glup; sourceTree = "<group>"; };
 		9B990B3924AF39050069DE77 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B9E772824A8D91200D0B0FA /* Gemini */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Gemini; sourceTree = "<group>"; };
 		9BF02CF024AF375100CDE400 /* Shikai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shikai.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B77C6EC24B02A38006C2632 /* Glup in Frameworks */,
 				9B50513324AF433A00D89A76 /* Gemini in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -103,6 +106,7 @@
 		9BA1444424A8D17900E0E97C = {
 			isa = PBXGroup;
 			children = (
+				9B74098424B01ACB00C6A013 /* Glup */,
 				9B9E772824A8D91200D0B0FA /* Gemini */,
 				9BF02CF124AF375100CDE400 /* Shikai */,
 				9BA1444E24A8D17900E0E97C /* Products */,
@@ -166,6 +170,7 @@
 			name = Shikai;
 			packageProductDependencies = (
 				9B50513224AF433A00D89A76 /* Gemini */,
+				9B77C6EB24B02A38006C2632 /* Glup */,
 			);
 			productName = Shikai;
 			productReference = 9BF02CF024AF375100CDE400 /* Shikai.app */;
@@ -426,6 +431,10 @@
 		9B50513224AF433A00D89A76 /* Gemini */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gemini;
+		};
+		9B77C6EB24B02A38006C2632 /* Glup */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Glup;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
